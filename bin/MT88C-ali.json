@@ -1,0 +1,12 @@
+{
+  "dev": "MT88C",
+  "type": "MQTT",
+  "index": "ali",
+  "channel":1,
+  "ver": 57,
+  "domain": "iot-as-mqtt.cn-shanghai.aliyuncs.com",
+  "ProductKey": "a1CgkJJ1ntk",
+  "DeviceName": "DEVICE_006",
+  "DeviceSecret": "8JhSmA04DEqGNGQGs6ITf3oUCpAaGpH2",
+  "sign": "qitas"
+}
