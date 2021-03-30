@@ -8,6 +8,7 @@ on:
       - 'Device/**'
       - 'include/**'
       - 'ldscripts/**'
+      - 'README*'
   pull_request:
     branches:
       - master
@@ -40,11 +41,12 @@ jobs:
         sudo apt-get install -y gcc-arm-none-eabi cmake
 
     - name: Build
+      if: success()
       working-directory: src
       run: |
-        mkdir build && cd build
-        cmake -DDEV_TYPE=MT84 .. && make
-        mkdir -p ./output && cp *.elf  *.bin "$_"
+        sudo chmod +x ./build.sh
+        sudo bash ./build.sh
+        mkdir -p ./output && cp *.bin "$_"
 
     - name: Upload
       uses: actions/upload-artifact@v2
