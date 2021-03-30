@@ -49,17 +49,17 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 message("++++++++++++++Start Build+++++++++++++++++")
 
 # header folder
-include_directories(${PROJECT_SOURCE_DIR}/include)
-include_directories(${PROJECT_SOURCE_DIR}/include/CMSIS)
-# include_directories(${PROJECT_SOURCE_DIR}/include/HALINCLUDE)
-include_directories(${PROJECT_SOURCE_DIR}/device/MM32F031x4x6_q/HAL_lib/inc)
+include_directories(${PROJECT_SOURCE_DIR}/../include)
+include_directories(${PROJECT_SOURCE_DIR}/../include/CMSIS)
+# include_directories(${PROJECT_SOURCE_DIR}/../include/HALINCLUDE)
+include_directories(${PROJECT_SOURCE_DIR}/../Device/MM32F031x4x6_q/HAL_lib/inc)
 
 
 
 
 # source file
 aux_source_directory(${PROJECT_SOURCE_DIR}/src USRSRC)
-aux_source_directory(${PROJECT_SOURCE_DIR}/device/MM32F031x4x6_q/HAL_lib/src HALSRC)
+aux_source_directory(${PROJECT_SOURCE_DIR}/../Device/MM32F031x4x6_q/HAL_lib/src HALSRC)
 # the hal source is same for kinds of m32f00 for cortex-m0 machine
 
 
@@ -113,12 +113,12 @@ set(CMAKE_EXE_LINKER_FLAGS "${MCU} -specs=nano.specs -specs=nosys.specs -T${LDSC
 
 if(MCU_TYPE STREQUAL "MM32F003")
     add_executable(${MY_TARGET}.elf ${USRSRC} ${HALSRC}
-       ${PROJECT_SOURCE_DIR}/device/startup_mm32f003.s
-       ${PROJECT_SOURCE_DIR}/device/system_MM32F003_q.c)
+       ${PROJECT_SOURCE_DIR}/../Device/startup_mm32f003.s
+       ${PROJECT_SOURCE_DIR}/../Device/system_MM32F003_q.c)
 elseif(MCU_TYPE STREQUAL "MM32F031")
      add_executable(${MY_TARGET}.elf ${USRSRC} ${HALSRC}
-        ${PROJECT_SOURCE_DIR}/device/startup_mm32f031x4x6_q.s
-        ${PROJECT_SOURCE_DIR}/device/system_MM32F031x4x6_q.c)
+        ${PROJECT_SOURCE_DIR}/../Device/startup_mm32f031x4x6_q.s
+        ${PROJECT_SOURCE_DIR}/../Device/system_MM32F031x4x6_q.c)
 else()
       message(FATAL_ERROR,"please select mcu type")
 endif()
