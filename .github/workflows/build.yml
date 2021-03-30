@@ -40,11 +40,11 @@ jobs:
       run: |
         sudo chmod +x ./build.sh
         sudo bash ./build.sh
-        mkdir -p ./output && cp *.elf  *.bin "$_"
+        mkdir -p ./output &&  cp  build/*.bin "$_"
 
     - name: Upload
       if: success()
       uses: actions/upload-artifact@v2
       with:
         name: matismart_build
-        path: src/build/output/
+        path: src/output/

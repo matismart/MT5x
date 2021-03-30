@@ -25,19 +25,16 @@ jobs:
           path: src
 
       - name: Install
-        if: success() && startsWith(github.ref, 'refs/tags/')
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake
-          wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
-          tar -xf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
+          sudo apt-get install -y gcc-arm-none-eabi cmake
 
       - name: Build
         working-directory: src
         run: |
           sudo chmod +x ./build.sh
           sudo bash ./build.sh
-          zip matismart.zip *.bin *.elf
+          zip matismart.zip build/*.bin
 
       - name: Create Release
         if: success() && startsWith(github.ref, 'refs/tags/')
