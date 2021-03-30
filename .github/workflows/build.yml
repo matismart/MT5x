@@ -17,6 +17,14 @@ jobs:
       uses: actions/checkout@v2
       with:
         submodules: "recursive"
+        fetch-depth: 1
+
+    - name: Checkout private
+      uses: actions/checkout@v2
+      with:
+        repository: matismart/handle
+        token: ${{ secrets.MATISMART }}
+        path: src
 
     - name: Install
       run: |
