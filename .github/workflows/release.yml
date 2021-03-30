@@ -10,14 +10,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     if: github.repository == 'matismart/release'
-    strategy:
-      fail-fast: true
-      matrix:
-        examples:
-          - "examples/arduino-blink"
-          - "examples/arduino-internal-libs"
-          - "examples/native-blink"
-
     steps:
       - name: Check out
         uses: actions/checkout@v2
@@ -33,15 +25,18 @@ jobs:
           path: src
 
       - name: Install
+        if: success() && startsWith(github.ref, 'refs/tags/')
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc-arm-none-eabi cmake
+          sudo apt-get install -y cmake
+          wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
+          tar -xf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
 
       - name: Build
         working-directory: src
         run: |
-          mkdir build && cd build
-          cmake -DDEV_TYPE=MT84 .. && make
+          sudo chmod +x ./build.sh
+          sudo bash ./build.sh
           zip matismart.zip *.bin *.elf
 
       - name: Create Release

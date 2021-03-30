@@ -1,8 +1,12 @@
 name: nightly
 
 on:
-  schedule:
-    - cron: '0 3 * * *' # run every day at 3AM
+  push:
+    branches:
+      - master
+# on:
+#   schedule:
+#     - cron: '0 3 * * *' # run every day at 3AM
 
 
 jobs:
@@ -14,7 +18,7 @@ jobs:
         os: [ubuntu-latest, macos-16.04]
         gcc-arm-none-eabi:
           - "2020-q4"
-          - "2019-q4"
+          - "2016-q3"
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -29,16 +33,21 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y cmake
 
-    - name: Install gcc-arm-none-eabi 2020-q4
-      if: success() && startsWith(github.ref, 'refs/tags/')
+    - name: build by gcc-arm-none-eabi 2020-q4
+      if: matrix.gcc-arm-none-eabi == '2020-q4'
       run: |
         wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
         tar -xf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
-
-    - name: Build
-      if: success()
-      working-directory: src
-      run: |
         mkdir build && cd build
         cmake -DDEV_TYPE=MT84 -D CROSS_COMPILER_PATH=../gcc-arm-none-eabi-10-2020-q4-major .. && make
-        mkdir -p ./output && cp *.elf "$_"
+        mkdir -p ./output && cp *.elf *.bin "$_"
+
+    - name: build by gcc-arm-none-eabi 2016-q3
+      if: matrix.gcc-arm-none-eabi == '2016-q3'
+      run: |
+        wget https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q3-update/+download/gcc-arm-none-eabi-5_4-2016q3-20160926-linux.tar.bz2
+        tar -xf gcc-arm-none-eabi-5_4-2016q3-20160926-linux.tar.bz2
+        mkdir build && cd build
+        cmake -DDEV_TYPE=MT84 -D CROSS_COMPILER_PATH=../gcc-arm-none-eabi-5_4-2016q3 .. && make
+        mkdir -p ./output && cp *.elf *.bin "$_"
+
