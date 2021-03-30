@@ -34,23 +34,9 @@ jobs:
         run: |
           sudo chmod +x ./build.sh
           sudo bash ./build.sh
-          zip matismart.zip build/*.bin
-
-      - name: SHA
-        working-directory: src
-        run: |
           echo "# Good things have arrived" > CHANGELOG.txt
           echo ${{ github.sha }} > release.txt
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: |
-            release.txt
-            CHANGELOG.txt
-        env:
-          GITHUB_TOKEN: ${{ secrets.MATISMART }}
+          zip matismart.zip build/*.bin release.txt CHANGELOG.txt
 
       - name: Create Release
         if: success() && startsWith(github.ref, 'refs/tags/')
