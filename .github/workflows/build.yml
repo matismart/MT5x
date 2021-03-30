@@ -43,7 +43,7 @@ jobs:
       working-directory: src
       run: |
         mkdir build && cd build
-        cmake -DMCU_TYPE=MM32F031 .. && make
+        cmake -DDEV_TYPE=MT84 .. && make
         mkdir -p ./output && cp *.elf "$_"
 
     - name: Upload
