@@ -1,0 +1,6 @@
+.pio/
+.vscode/
+Device/CMSIS/IAR_CORE
+Device/CMSIS/KEIL_CORE
+KEIL_StartAsm/
+IAR_StartAsm/
