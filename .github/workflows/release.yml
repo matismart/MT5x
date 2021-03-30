@@ -86,7 +86,7 @@ jobs:
           # Literal body:
           body: Build job of ${{github.repository}} completed successfully!
           # Read file contents as body:
-          body: file://README.md
+          # body: file://README.md
           to: qitas@qitas.cn,qitas@hotmail.com
           from: Qitas # <user@example.com>
           # Optional carbon copy recipients
