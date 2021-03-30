@@ -1,43 +1,44 @@
-name: latest
+name: nightly
 
 on:
-  push:
-    paths:
-      - 'src/**'
-  pull_request:
-    paths:
-      - 'src/**'
+  schedule:
+    - cron: '0 3 * * *' # run every day at 3AM
+
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    if: github.repository == 'matismart/release'
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-16.04]
+        gcc-arm-none-eabi:
+          - "2020-q4"
+          - "2019-q4"
 
+    runs-on: ${{ matrix.os }}
     steps:
     - name: Check out
       uses: actions/checkout@v2
       with:
         submodules: "recursive"
+        fetch-depth: 1
 
-    - name: Install
+    - name: Install Cmake
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake
 
-    - name: Download
-      working-directory: src
+    - name: Install gcc-arm-none-eabi 2020-q4
+      if: success() && startsWith(github.ref, 'refs/tags/')
       run: |
         wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
         tar -xf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
 
     - name: Build
+      if: success()
       working-directory: src
       run: |
         mkdir build && cd build
         cmake -DMCU_TYPE=MM32F031 -D CROSS_COMPILER_PATH=../gcc-arm-none-eabi-10-2020-q4-major .. && make
         mkdir -p ./output && cp *.elf "$_"
-
-    - name: Upload
-      uses: actions/upload-artifact@v2
-      with:
-        name: firmware
-        path: src/build/output/
