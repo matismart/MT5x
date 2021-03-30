@@ -51,16 +51,11 @@ message("++++++++++++++Start Build+++++++++++++++++")
 # header folder
 include_directories(${PROJECT_SOURCE_DIR}/../include)
 include_directories(${PROJECT_SOURCE_DIR}/../include/CMSIS)
-# include_directories(${PROJECT_SOURCE_DIR}/../include/HALINCLUDE)
 include_directories(${PROJECT_SOURCE_DIR}/../Device/MM32F031x4x6_q/HAL_lib/inc)
-
-
-
 
 # source file
 aux_source_directory(${PROJECT_SOURCE_DIR}/src USRSRC)
 aux_source_directory(${PROJECT_SOURCE_DIR}/../Device/MM32F031x4x6_q/HAL_lib/src HALSRC)
-# the hal source is same for kinds of m32f00 for cortex-m0 machine
 
 
 # cpu
