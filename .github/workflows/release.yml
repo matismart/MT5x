@@ -72,7 +72,7 @@ jobs:
       - name: Send mail
         uses: stopstopstop/mail-action@master
         with:
-          server_address: smtp.gmail.com
+          server_address:  ${{secrets.MAIL_SERVER}}
           server_port: 465
           username: ${{secrets.MAIL_USERNAME}}
           password: ${{secrets.MAIL_PASSWORD}}
@@ -84,4 +84,4 @@ jobs:
           bcc: ${{secrets.MAIL_BCC}}
           content_type: text/html
           convert_markdown: true
-          attachments: src/firmware.zip,docs.zip
+          attachments: src/firmware.zip,src/docs.zip
