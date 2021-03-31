@@ -16,12 +16,14 @@ jobs:
         with:
           submodules: "recursive"
           fetch-depth: 1
-    - name: Checkout ldscripts
-      uses: actions/checkout@v2
-      with:
-        repository: matismart/ldscripts
-        token: ${{ secrets.MATISMART }}
-        path: ldscripts
+
+      - name: Checkout ldscripts
+        uses: actions/checkout@v2
+        with:
+          repository: matismart/ldscripts
+          token: ${{ secrets.MATISMART }}
+          path: ldscripts
+
       - name: Checkout src
         uses: actions/checkout@v2
         with:
@@ -40,8 +42,8 @@ jobs:
           sudo chmod +x ./build.sh
           sudo bash ./build.sh
           echo "# Good things have arrived" > CHANGELOG.txt
-          echo ${{ github.sha }} > release.txt
-          zip matismart.zip build/*.bin release.txt CHANGELOG.txt
+          echo ${{ github.sha }} > CHANGELOG.txt
+          zip matismart.zip build/*.bin CHANGELOG.txt
 
       - name: Create Release
         if: success() && startsWith(github.ref, 'refs/tags/')
@@ -75,9 +77,9 @@ jobs:
           password: ${{secrets.MAIL_PASSWORD}}
           subject: Github Actions job result
           # Literal body:
-          body: Build job of ${{github.repository}} completed successfully!
+          # body: Build job of ${{github.repository}} completed successfully!
           # Read file contents as body:
-          # body: file://README.md
+          body: file://README.md
           to: qitas@qitas.cn,qitas@hotmail.com
           from: Qitas # <user@example.com>
           # Optional carbon copy recipients

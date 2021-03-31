@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, ubuntu-16.04]
+        os: [ubuntu-latest, ubuntu-18.04, ubuntu-16.04]
         gcc-arm-none-eabi:
           - "2020-q4"
           - "2016-q3"
@@ -27,12 +27,14 @@ jobs:
       with:
         submodules: "recursive"
         fetch-depth: 1
+
     - name: Checkout ldscripts
       uses: actions/checkout@v2
       with:
         repository: matismart/ldscripts
         token: ${{ secrets.MATISMART }}
         path: ldscripts
+
     - name: Checkout private
       uses: actions/checkout@v2
       with:
