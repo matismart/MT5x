@@ -6,10 +6,7 @@ on:
       - master
     paths:
       - 'Device/**'
-      - 'include/**'
-      - 'ldscripts/**'
-      - '.github/workflows/**'
-      - 'README*'
+      - '.github/workflows/build.yml'
 
 jobs:
   build:
