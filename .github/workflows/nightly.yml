@@ -27,7 +27,12 @@ jobs:
       with:
         submodules: "recursive"
         fetch-depth: 1
-
+    - name: Checkout ldscripts
+      uses: actions/checkout@v2
+      with:
+        repository: matismart/ldscripts
+        token: ${{ secrets.MATISMART }}
+        path: ldscripts
     - name: Checkout private
       uses: actions/checkout@v2
       with:
