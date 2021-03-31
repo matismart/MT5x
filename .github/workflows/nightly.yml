@@ -1,12 +1,12 @@
 name: nightly
 
-on:
-  push:
-    branches:
-      - master
 # on:
-#   schedule:
-#     - cron: '0 3 * * *' # run every day at 3AM
+#   push:
+#     branches:
+#       - master
+on:
+  schedule:
+    - cron: '0 3 * * *'
 
 
 jobs:
