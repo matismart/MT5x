@@ -51,7 +51,7 @@ jobs:
       run: |
         wget https://github.com/Kitware/CMake/releases/download/v3.20.0/cmake-3.20.0-linux-x86_64.sh
         sudo chmod +x cmake-3.20.0-linux-x86_64.sh
-        sudo ./cmake-3.20.0-linux-x86_64.sh
+        sudo ./cmake-3.20.0-linux-x86_64.sh -y
         export PATH=$PWD/cmake-3.20.0-linux-x86_64/bin:$PATH
         cmake --version
 
@@ -59,10 +59,10 @@ jobs:
       working-directory: src
       if: matrix.cmake == '3.10.0'
       run: |
-        wget https://github.com/Kitware/CMake/releases/download/v3.12.0/cmake-3.12.0-Linux-x86_64.sh
-        sudo chmod +x cmake-3.12.0-Linux-x86_64.sh
-        sudo ./cmake-3.12.0-Linux-x86_64.sh
-        export PATH=$PWD/cmake-3.12.0-Linux-x86_64/bin:$PATH
+        wget https://github.com/Kitware/CMake/releases/download/v3.10.0/cmake-3.10.0-Linux-x86_64.sh
+        sudo chmod +x cmake-3.10.0-Linux-x86_64.sh
+        sudo ./cmake-3.10.0-Linux-x86_64.sh -y
+        export PATH=$PWD/cmake-3.10.0-Linux-x86_64/bin:$PATH
         cmake --version
 
     - name: build by gcc-arm-none-eabi 2016-q3

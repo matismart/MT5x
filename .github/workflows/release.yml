@@ -51,9 +51,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            src/CHANGELOG.txt
             src/docs.zip
-            README.md
         env:
           GITHUB_TOKEN: ${{ secrets.MATISMART }}
 
@@ -64,7 +62,7 @@ jobs:
           server_port: ${{secrets.MAIL_PORT}}
           username: ${{secrets.MAIL_USERNAME}}
           password: ${{secrets.MAIL_PASSWORD}}
-          subject: matismart firmware release
+          subject: matismart firmware
           body: file://README.md
           to: ${{secrets.MAIL_TO}}
           from: Qitas
