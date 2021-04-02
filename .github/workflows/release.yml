@@ -56,28 +56,6 @@ jobs:
             README.md
         env:
           GITHUB_TOKEN: ${{ secrets.MATISMART }}
-      # - name: Create Release
-      #   if: success() && startsWith(github.ref, 'refs/tags/')
-      #   id: create_release
-      #   uses: actions/create-release@master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.MATISMART }}
-      #   with:
-      #     tag_name: ${{ github.ref }}
-      #     release_name: matismart handle release ${{ github.ref }}
-      #     draft: false
-      #     prerelease: false
-
-      # - name: Upload Release
-      #   id: upload-release-asset
-      #   uses: actions/upload-release-asset@master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.MATISMART }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path: src/docs.zip
-      #     asset_name: docs.zip
-      #     asset_content_type: application/x-zip
 
       - name: Send mail
         uses: stopstopstop/mail-action@master
@@ -94,4 +72,4 @@ jobs:
           bcc: ${{secrets.MAIL_BCC}}
           content_type: text/html
           convert_markdown: true
-          attachments: src/firmware.zip,src/docs.zip
+          attachments: src/firmware.zip

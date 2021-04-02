@@ -1,12 +1,12 @@
 name: nightly
 
-# on:
-#   push:
-#     branches:
-#       - master
 on:
-  schedule:
-    - cron: '0 3 * * *'
+  push:
+    branches:
+      - master
+# on:
+#   schedule:
+#     - cron: '0 15 * * *'
 
 
 jobs:
@@ -16,6 +16,9 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, ubuntu-18.04, ubuntu-16.04]
+        cmake:
+          - "3.20.0"
+          - "3.10.0"
         gcc-arm-none-eabi:
           - "2020-q4"
           - "2016-q3"
@@ -42,10 +45,32 @@ jobs:
         token: ${{ secrets.MATISMART }}
         path: src
 
-    - name: Install Cmake
+    - name: build by cmake 3.20.0
+      working-directory: src
+      if: matrix.cmake == '3.20.0'
+      run: |
+        wget https://github.com/Kitware/CMake/releases/download/v3.20.0/cmake-3.20.0-linux-x86_64.sh
+        sudo chmod +x cmake-3.20.0-linux-x86_64.sh
+        sudo ./cmake-3.20.0-linux-x86_64.sh
+        export PATH=$PWD/cmake-3.20.0-linux-x86_64/bin:$PATH
+        cmake --version
+
+    - name: build by cmake 3.10.0
+      working-directory: src
+      if: matrix.cmake == '3.10.0'
       run: |
         sudo apt-get update
         sudo apt-get install -y cmake
+        cmake --version
+
+    - name: build by gcc-arm-none-eabi 2016-q3
+      working-directory: src
+      if: matrix.gcc-arm-none-eabi == '2016-q3'
+      run: |
+        wget https://launchpad.net/gcc-arm-embedded/5.0/5-2016-q3-update/+download/gcc-arm-none-eabi-5_4-2016q3-20160926-linux.tar.bz2
+        tar -xf gcc-arm-none-eabi-5_4-2016q3-20160926-linux.tar.bz2
+        mkdir build && cd build
+        cmake -DDEV_TYPE=MT84 -D CROSS_COMPILER_PATH=../gcc-arm-none-eabi-5_4-2016q3 .. && make
 
     - name: build by gcc-arm-none-eabi 2020-q4
       working-directory: src
@@ -64,5 +89,6 @@ jobs:
         tar -xf gcc-arm-none-eabi-5_4-2016q3-20160926-linux.tar.bz2
         mkdir build && cd build
         cmake -DDEV_TYPE=MT84 -D CROSS_COMPILER_PATH=../gcc-arm-none-eabi-5_4-2016q3 .. && make
+
 
 
