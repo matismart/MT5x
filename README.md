@@ -5,5 +5,3 @@
 [![Build Status](https://github.com/matismart/release/workflows/release/badge.svg)](https://github.com/matismart/release/actions/workflows/release.yml)
 
 自动构建仓库，用于发布编译的固件
-
-测试相关仓库构建
