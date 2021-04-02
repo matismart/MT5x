@@ -49,7 +49,7 @@ jobs:
           echo ${{ github.ref }} >> CHANGELOG.txt
           echo ${{ github.sha }} >> CHANGELOG.txt
           cp build/*.bin ${{ steps.get_version.outputs.VERSION }}.bin
-          zip firmware.zip  $RELEASE_VERSION.bin CHANGELOG.txt
+          zip firmware.zip ${{ steps.get_version.outputs.VERSION }}.bin CHANGELOG.txt
           zip docs.zip CHANGELOG.txt
 
       - name: Release
@@ -76,4 +76,15 @@ jobs:
           bcc: ${{secrets.MAIL_BCC}}
           content_type: text/html
           convert_markdown: true
-          attachments: docs.zip,src/${{ steps.get_version.outputs.VERSION }}.bin,src/firmware.zip
+          attachments: src/docs.zip,src/${{ steps.get_version.outputs.VERSION }}.bin,src/firmware.zip
+
+      - name: upload
+        uses: stopstopstop/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.SSHPORT }}
+          script: |
+            cd /home/github/matismart/release
+            git pull
