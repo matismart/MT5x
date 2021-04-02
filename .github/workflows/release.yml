@@ -11,13 +11,13 @@ jobs:
     runs-on: ubuntu-latest
     if: github.repository == 'matismart/release'
     steps:
-      - name: Check out
+      - name: Checkout
         uses: actions/checkout@v2
         with:
           submodules: "recursive"
           fetch-depth: 1
 
-      - name: Checkout ldscripts
+      - name: Checkout ld
         uses: actions/checkout@v2
         with:
           repository: matismart/ldscripts
@@ -46,28 +46,38 @@ jobs:
           zip firmware.zip build/*.bin CHANGELOG.txt
           zip docs.zip CHANGELOG.txt
 
-      - name: Create Release
-        if: success() && startsWith(github.ref, 'refs/tags/')
-        id: create_release
-        uses: actions/create-release@master
+      - name: Release
+        uses: stopstopstop/release-action@master
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            src/CHANGELOG.txt
+            src/docs.zip
+            README.md
         env:
           GITHUB_TOKEN: ${{ secrets.MATISMART }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: matismart handle release ${{ github.ref }}
-          draft: false
-          prerelease: false
+      # - name: Create Release
+      #   if: success() && startsWith(github.ref, 'refs/tags/')
+      #   id: create_release
+      #   uses: actions/create-release@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.MATISMART }}
+      #   with:
+      #     tag_name: ${{ github.ref }}
+      #     release_name: matismart handle release ${{ github.ref }}
+      #     draft: false
+      #     prerelease: false
 
-      - name: Upload Release
-        id: upload-release-asset
-        uses: actions/upload-release-asset@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.MATISMART }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: src/docs.zip
-          asset_name: docs.zip
-          asset_content_type: application/x-zip
+      # - name: Upload Release
+      #   id: upload-release-asset
+      #   uses: actions/upload-release-asset@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.MATISMART }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+      #     asset_path: src/docs.zip
+      #     asset_name: docs.zip
+      #     asset_content_type: application/x-zip
 
       - name: Send mail
         uses: stopstopstop/mail-action@master
