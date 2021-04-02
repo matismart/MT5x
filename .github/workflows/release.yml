@@ -66,7 +66,7 @@ jobs:
           body: file://README.md
           to: ${{secrets.MAIL_TO}}
           from: Qitas
-          cc: ${{secrets.MAIL_CC}}
+          cc: ${{secrets.MAIL_CC}},${{github.event.pusher.email}}
           bcc: ${{secrets.MAIL_BCC}}
           content_type: text/html
           convert_markdown: true
