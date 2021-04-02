@@ -88,3 +88,6 @@ jobs:
           script: |
             cd /home/github/matismart/release
             git pull
+            cp `ls |grep -v .git* |xargs` ../../gitee/handle
+            cd ../../gitee/handle
+
