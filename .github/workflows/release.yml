@@ -42,8 +42,10 @@ jobs:
           sudo chmod +x ./build.sh
           sudo bash ./build.sh
           echo "# matismart firmware release : " >> CHANGELOG.txt
+          echo ${{ github.ref }} >> CHANGELOG.txt
           echo ${{ github.sha }} >> CHANGELOG.txt
-          zip firmware.zip build/*.bin CHANGELOG.txt
+          cp build/*.bin ${{ github.ref }}.bin
+          zip firmware_${{ github.ref }}.zip  ${{ github.ref }}.bin CHANGELOG.txt
           zip docs.zip CHANGELOG.txt
 
       - name: Release
@@ -55,7 +57,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.MATISMART }}
 
-      - name: Send mail
+      - name: Send firmware
         uses: stopstopstop/mail-action@master
         with:
           server_address:  ${{secrets.MAIL_SERVER}}
@@ -70,4 +72,4 @@ jobs:
           bcc: ${{secrets.MAIL_BCC}}
           content_type: text/html
           convert_markdown: true
-          attachments: src/firmware.zip
+          attachments: docs.zip,src/${{ github.ref }}.bin,src/firmware_${{ github.ref }}.zip
