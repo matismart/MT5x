@@ -36,12 +36,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc-arm-none-eabi cmake
 
-      - name: Set env
-        run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF#refs/*/}
-      - name: Test
-        run: |
-          echo $RELEASE_VERSION
-          echo ${{ env.RELEASE_VERSION }}
+      - name: Get version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
       - name: Build
         working-directory: src
@@ -51,8 +48,8 @@ jobs:
           echo "# matismart firmware release : " >> CHANGELOG.txt
           echo ${{ github.ref }} >> CHANGELOG.txt
           echo ${{ github.sha }} >> CHANGELOG.txt
-          cp build/*.bin ${{ github.ref }}.bin
-          zip firmware_$RELEASE_VERSION.zip  $RELEASE_VERSION.bin CHANGELOG.txt
+          cp build/*.bin ${{ steps.get_version.outputs.VERSION }}.bin
+          zip firmware.zip  $RELEASE_VERSION.bin CHANGELOG.txt
           zip docs.zip CHANGELOG.txt
 
       - name: Release
@@ -79,4 +76,4 @@ jobs:
           bcc: ${{secrets.MAIL_BCC}}
           content_type: text/html
           convert_markdown: true
-          attachments: docs.zip,src/$RELEASE_VERSION.bin,src/firmware_$RELEASE_VERSION.zip
+          attachments: docs.zip,src/${{ steps.get_version.outputs.VERSION }}.bin,src/firmware.zip
