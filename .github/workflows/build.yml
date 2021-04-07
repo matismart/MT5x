@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - master
-    # paths:
-    #   - 'Device/**'
-    #   - '.github/workflows/build.yml'
 
 jobs:
   build:
