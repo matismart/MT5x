@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - MT84
 
 jobs:
   build:

@@ -1,9 +1,7 @@
-name: release ALL
+name: release
 
 on:
   push:
-    branches:
-      - master
     tags:
       - 'v*'
 
