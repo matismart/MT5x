@@ -29,7 +29,7 @@ jobs:
     - name: Checkout private
       uses: actions/checkout@v2
       with:
-        repository: matismart/handle
+        repository: matismart/handler
         token: ${{ secrets.MATISMART }}
         path: src
 
