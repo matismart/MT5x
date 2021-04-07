@@ -4,9 +4,9 @@ on:
   push:
     branches:
       - master
-    paths:
-      - 'Device/**'
-      - '.github/workflows/build.yml'
+    # paths:
+    #   - 'Device/**'
+    #   - '.github/workflows/build.yml'
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
         submodules: "recursive"
         fetch-depth: 1
 
-    - name: Checkout ldscripts
+    - name: Checkout link
       uses: actions/checkout@v2
       with:
         repository: matismart/ldscripts
