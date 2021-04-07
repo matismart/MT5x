@@ -1,7 +1,9 @@
-name: release
+name: MT84 release
 
 on:
   push:
+    branches:
+      - MT84
     tags:
       - 'v*'
 

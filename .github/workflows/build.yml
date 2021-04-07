@@ -3,9 +3,7 @@ name: build
 on:
   push:
     branches:
-      - master
       - MT84
-      - MT53
     # paths:
     #   - 'Device/**'
     #   - '.github/workflows/build.yml'
