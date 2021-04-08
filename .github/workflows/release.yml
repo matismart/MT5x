@@ -59,7 +59,8 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            src/docs.zip
+            src/CHANGELOG.txt
+            src/README.md
         env:
           GITHUB_TOKEN: ${{ secrets.MATISMART }}
 
