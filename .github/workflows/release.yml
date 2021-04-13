@@ -36,35 +36,47 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gcc-arm-none-eabi cmake
 
+      - name: Build
+        working-directory: src
+        run: |
+          sudo chmod +x ./build.sh
+          sudo bash ./build.sh
+
       - name: Get version
         if: startsWith(github.ref, 'refs/tags/')
         id: get_version
         run: |
           echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
 
-      - name: Build
+      - name: Generate tag
+        id: tag
+        if: startsWith(github.ref, 'refs/tags/') && steps.build.outputs.status == 'success' && !cancelled()
+        run: |
+          echo "::set-output name=release_tag::Release_${GITHUB_REF/refs\/tags\//}_$(date +"%Y.%m.%d")"
+          echo "::set-output name=status::success"
+
+      - name: Package
+        id: file
         working-directory: src
         run: |
-          sudo chmod +x ./build.sh
-          sudo bash ./build.sh
           echo "# matismart firmware release : " >> CHANGELOG.txt
           echo ${{ github.ref }} >> CHANGELOG.txt
           echo ${{ github.sha }} >> CHANGELOG.txt
-          cp build/*.bin ${{ steps.get_version.outputs.VERSION }}.bin
-          zip firmware.zip ${{ steps.get_version.outputs.VERSION }}.bin CHANGELOG.txt
-          zip docs.zip CHANGELOG.txt
+          zip -r ${{ steps.get_version.outputs.VERSION }}.zip build CHANGELOG.txt
+          zip -r docs.zip scripts
 
       - name: Release
         uses: stopstopstop/release-action@master
-        if: startsWith(github.ref, 'refs/tags/')
+        if: steps.tag.outputs.status == 'success' && !cancelled()
         with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
           files: |
             src/CHANGELOG.txt
-            src/README.md
+            src/docs.zip
         env:
           GITHUB_TOKEN: ${{ secrets.MATISMART }}
 
-      - name: Send firmware
+      - name: Send mail
         uses: stopstopstop/mail-action@master
         with:
           server_address:  ${{secrets.MAIL_SERVER}}
@@ -79,18 +91,5 @@ jobs:
           bcc: ${{secrets.MAIL_BCC}}
           content_type: text/html
           convert_markdown: true
-          attachments: src/docs.zip,src/${{ steps.get_version.outputs.VERSION }}.bin,src/firmware.zip
-
-      - name: upload
-        uses: stopstopstop/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USER }}
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.SSHPORT }}
-          script: |
-            cd /home/github/matismart/release
-            git pull
-            cp `ls |grep -v .git* |xargs` ../../gitee/handle
-            cd ../../gitee/handle
+          attachments: src/${{ steps.get_version.outputs.VERSION }}.zip
 
